@@ -123,6 +123,41 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &285402355
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 285402356}
+  m_Layer: 5
+  m_Name: PanelParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &285402356
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285402355}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -5000}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 600459654}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 32, y: -32}
+  m_SizeDelta: {x: 1024, y: 768}
+  m_Pivot: {x: 1, y: 1}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,6 +284,9 @@ MonoBehaviour:
   - {r: 1, g: 1, b: 1, a: 0.39215687}
   - {r: 0, g: 0, b: 0, a: 0.39215687}
   minePrefab: {fileID: 6537141037928142162, guid: 3aae427a40059ed4aab13ca36c2d691b, type: 3}
+  tilePanelPrefab: {fileID: 3448804264504128641, guid: 24daa1fd52643462c806edb436945a62, type: 3}
+  panelParent: {fileID: 285402355}
+  useManhattanHeuristic: 1
 --- !u!4 &571498480
 Transform:
   m_ObjectHideFlags: 0
@@ -333,10 +371,10 @@ Canvas:
   m_GameObject: {fileID: 600459650}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -358,7 +396,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 285402356}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -378,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3fcc80134aee54095060bbbb8aa855, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockToGrid: 0
+  lockToGrid: 1
 --- !u!1 &1826504611
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,6 +620,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7429664672012497294, guid: 27e9559a357116b47afd7409e759ebe7, type: 3}
       propertyPath: m_Name
+      value: Planet
+      objectReference: {fileID: 0}
+    - target: {fileID: 7429664672012497294, guid: 27e9559a357116b47afd7409e759ebe7, type: 3}
+      propertyPath: m_TagString
       value: Planet
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -26,20 +26,35 @@ public class ClickDragScript : MonoBehaviour
                     isDragging = true;
                     currentlyDraggedObject = rb2d;
                     offset = rb2d.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    // Add extra behaviour for mines in Lab 4 part 1.
-                    //
-                    //
-                    //
+
+                    if(currentlyDraggedObject.gameObject.tag == "Mines" ||
+                        currentlyDraggedObject.gameObject.tag == "ship" ||
+                        currentlyDraggedObject.gameObject.tag == "Panet")
+                    {
+                        Vector2 tileIndex = currentlyDraggedObject.gameObject.GetComponent<NavigationObject>().GetGridIndex();
+                        GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.UNVISITED);
+                    }
                 }
             }
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            // Add extra behaviour for mines in Lab 4 part 1.
-            //
-            //
-            //
-            // Stop dragging.
+            if (!isDragging) return;
+
+            Vector2 tileIndex = currentlyDraggedObject.gameObject.GetComponent<NavigationObject>().GetGridIndex();
+            if(currentlyDraggedObject.gameObject.tag == "Mines")
+            {
+                GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
+            }
+            if (currentlyDraggedObject.gameObject.tag == "ship")
+            {
+                GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.START);
+            }
+            if (currentlyDraggedObject.gameObject.tag == "Planet")
+            {
+                GridManager.Instance.SetTileCosts(currentlyDraggedObject.GetComponent<NavigationObject>().GetGridIndex());
+                GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
+            }
             isDragging = false;
             currentlyDraggedObject = null;
         }
