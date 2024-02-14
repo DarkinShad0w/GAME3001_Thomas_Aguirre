@@ -27,9 +27,9 @@ public class ClickDragScript : MonoBehaviour
                     currentlyDraggedObject = rb2d;
                     offset = rb2d.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                    if(currentlyDraggedObject.gameObject.tag == "Mines" ||
+                    if (currentlyDraggedObject.gameObject.tag == "Mines" ||
                         currentlyDraggedObject.gameObject.tag == "ship" ||
-                        currentlyDraggedObject.gameObject.tag == "Panet")
+                        currentlyDraggedObject.gameObject.tag == "Planet")
                     {
                         Vector2 tileIndex = currentlyDraggedObject.gameObject.GetComponent<NavigationObject>().GetGridIndex();
                         GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.UNVISITED);
@@ -42,19 +42,21 @@ public class ClickDragScript : MonoBehaviour
             if (!isDragging) return;
 
             Vector2 tileIndex = currentlyDraggedObject.gameObject.GetComponent<NavigationObject>().GetGridIndex();
-            if(currentlyDraggedObject.gameObject.tag == "Mines")
+            if (currentlyDraggedObject.gameObject.tag == "Mines")
             {
                 GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
             }
-            if (currentlyDraggedObject.gameObject.tag == "ship")
+            else if (currentlyDraggedObject.gameObject.tag == "ship")
             {
                 GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.START);
             }
-            if (currentlyDraggedObject.gameObject.tag == "Planet")
+            else if (currentlyDraggedObject.gameObject.tag == "Planet")
             {
                 GridManager.Instance.SetTileCosts(currentlyDraggedObject.GetComponent<NavigationObject>().GetGridIndex());
                 GridManager.Instance.GetGrid()[(int)tileIndex.y, (int)tileIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
             }
+
+            // Stop dragging.
             isDragging = false;
             currentlyDraggedObject = null;
         }
@@ -72,7 +74,6 @@ public class ClickDragScript : MonoBehaviour
                 Vector2 gridPosition = GridManager.Instance.GetGridPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                 currentlyDraggedObject.MovePosition(gridPosition);
             }
-            
             currentlyDraggedObject.GetComponent<NavigationObject>().SetGridIndex();
         }
     }

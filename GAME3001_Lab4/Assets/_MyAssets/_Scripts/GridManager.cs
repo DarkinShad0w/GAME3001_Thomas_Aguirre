@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,20 +22,19 @@ public enum NeighbourTile
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] GameObject tilePrefab;
-    [SerializeField] Color[] colors;
-    [SerializeField] GameObject minePrefab;
+    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private GameObject minePrefab;
     [SerializeField] private GameObject tilePanelPrefab;
     [SerializeField] private GameObject panelParent;
-    [SerializeField] bool useManhattanHeuristic = true;
+    [SerializeField] Color[] colors;
 
+    [SerializeField] private bool useManhattanHeuristic = true;
+    [SerializeField] private float baseTileCost = 1;
 
     private GameObject[,] grid;
-    private List<GameObject> mines = new List<GameObject>();
+    private List<GameObject> mines = new();
     private int rows = 12;
-    private int columns = 16;
-
-    private float baseTileCost = 1f;
+    private int cols = 16;
 
     public static GridManager Instance { get; private set; } // Static object of the class.
 
@@ -56,64 +54,64 @@ public class GridManager : MonoBehaviour
     private void Initialize()
     {
         BuildGrid();
+        ConnectGrid();
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            foreach(Transform child in transform)
+            foreach (Transform child in transform)
             {
                 child.gameObject.SetActive(!child.gameObject.activeSelf);
             }
             panelParent.SetActive(!panelParent.gameObject.activeSelf);
         }
 
-        if(Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             Vector2 gridPosition = GetGridPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            GameObject mineInst = GameObject.Instantiate(minePrefab, new Vector3(gridPosition.x, gridPosition.y), Quaternion.identity);
+            GameObject mineInst = Instantiate(minePrefab, new Vector3(gridPosition.x, gridPosition.y), Quaternion.identity);
             Vector2 mineIndex = mineInst.GetComponent<NavigationObject>().GetGridIndex();
             grid[(int)mineIndex.y, (int)mineIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
 
             mines.Add(mineInst);
         }
 
-        if(Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            foreach(GameObject mine in mines)
+            foreach (var mine in mines)
             {
                 Vector2 mineIndex = mine.GetComponent<NavigationObject>().GetGridIndex();
                 grid[(int)mineIndex.y, (int)mineIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.UNVISITED);
-                Destroy(mine);
             }
+
             mines.Clear();
         }
     }
 
     private void BuildGrid()
     {
-        grid = new GameObject[rows, columns];
+        grid = new GameObject[rows, cols];
+
         int count = 0;
         float rowPos = 5.5f;
-
-        for (int row = 0; row <rows; row++, rowPos--)
+        for (int row = 0; row < rows; row++, rowPos--)
         {
             float colPos = -7.5f;
-            for (int col = 0; col <columns; col++, colPos++)
+            for (int col = 0; col < cols; col++, colPos++)
             {
-                GameObject tileInst = GameObject.Instantiate(tilePrefab, new Vector3(colPos, rowPos, 0),Quaternion.identity);
+                GameObject tileInst = Instantiate(tilePrefab, new(colPos, rowPos, 0), Quaternion.identity);
                 TileScript tileScript = tileInst.GetComponent<TileScript>();
-                tileScript.SetColor(colors[System.Convert.ToInt32((count++ % 2 == 0))]);
-
-                tileInst.transform.parent = transform;
+                tileScript.SetColor(colors[System.Convert.ToInt32(count++ % 2 == 0)]);
+                tileInst.transform.SetParent(transform);
                 grid[row, col] = tileInst;
 
-                GameObject panelInst = GameObject.Instantiate(tilePanelPrefab, tilePanelPrefab.transform.position, Quaternion.identity);
-                panelInst.transform.SetParent(panelParent.transform);
+                GameObject panelInst = Instantiate(tilePanelPrefab, tileInst.transform.position, Quaternion.identity);
                 RectTransform panelTransform = panelInst.GetComponent<RectTransform>();
+                panelInst.transform.SetParent(panelParent.transform);
                 panelTransform.localScale = Vector3.one;
-                panelTransform.anchoredPosition = new Vector3(64f * col, -64f * row);
+                panelTransform.anchoredPosition = new Vector3(64 * col, -64 * row);
                 tileScript.tilePanel = panelInst.GetComponent<TilePanel>();
             }
             count--;
@@ -121,53 +119,37 @@ public class GridManager : MonoBehaviour
 
         GameObject ship = GameObject.FindGameObjectWithTag("ship");
         Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
-        Debug.Log("Ship indices: " + shipIndices);
         grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.START);
 
-
         GameObject planet = GameObject.FindGameObjectWithTag("Planet");
-        Vector2 planetIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
-        Debug.Log("planet indices: " + planetIndices);
+        Vector2 planetIndices = planet.GetComponent<NavigationObject>().GetGridIndex();
+
         grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
-
-        SetTileCosts(planetIndices);
-
-
+        SetTileCosts(shipIndices);
     }
 
     private void ConnectGrid()
     {
-        for(int row = 0; row<rows; row++)
+        for (int row = 0; row < rows; row++)
         {
-            for(int col = 0; col<columns; col++)
+            for (int col = 0; col < cols; col++)
             {
                 TileScript tileScript = grid[row, col].GetComponent<TileScript>();
                 if (row > 0)
-                {
                     tileScript.SetNeighbourTile((int)NeighbourTile.TOP_TILE, grid[row - 1, col]);
-                }
-                if (col < columns - 1)
-                {
-                    tileScript.SetNeighbourTile((int)NeighbourTile.RIGHT_TILE, grid[row, col+1]);
-                }
-                if (row > rows -1)
-                {
+                if (col < cols - 1)
+                    tileScript.SetNeighbourTile((int)NeighbourTile.RIGHT_TILE, grid[row, col + 1]);
+                if (row < rows - 1)
                     tileScript.SetNeighbourTile((int)NeighbourTile.BOTTOM_TILE, grid[row + 1, col]);
-                }
                 if (col > 0)
-                {
                     tileScript.SetNeighbourTile((int)NeighbourTile.LEFT_TILE, grid[row, col - 1]);
-                }
             }
         }
     }
 
     public GameObject[,] GetGrid()
     {
-        // Fix for Lab 4 Part 1.
-        //
-        // return grid;
-        return null;
+        return grid;
     }
 
     // The following utility function creates the snapping to the center of a tile.
@@ -180,23 +162,23 @@ public class GridManager : MonoBehaviour
 
     public void SetTileCosts(Vector2 targetIndices)
     {
-        float distance = 0f;
-        float dx = 0f;
-        float dy = 0f;
+        float distance = 0;
+        float dx = 0;
+        float dy = 0;
 
-        for(int row = 0; row < rows; row++)
+        for (int row = 0; row < rows; row++)
         {
-            for(int col = 0; col < columns; col++)
+            for (int col = 0; col < cols; col++)
             {
                 TileScript tileScript = grid[row, col].GetComponent<TileScript>();
-                if(useManhattanHeuristic)
+                if (useManhattanHeuristic)
                 {
                     dx = Mathf.Abs(col - targetIndices.x);
                     dy = Mathf.Abs(row - targetIndices.y);
 
                     distance = dx + dy;
                 }
-                else
+                else // euclidean distance
                 {
                     dx = targetIndices.x - col;
                     dy = targetIndices.y - row;

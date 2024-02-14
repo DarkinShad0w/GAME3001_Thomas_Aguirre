@@ -103,4 +103,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   original: {r: 0, g: 0, b: 0, a: 0}
+  tilePanel: {fileID: 0}
   status: 0
+  cost: 999.9
