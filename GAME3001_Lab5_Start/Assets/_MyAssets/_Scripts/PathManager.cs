@@ -84,7 +84,89 @@ public class PathManager : MonoBehaviour
 
     public void GetShortestPath(PathNode start, PathNode goal)
     {
-        //TODO Week9 lab
+        if (path.Count > 0)
+        {
+            GridManager.Instance.SetTileStatuses();
+            path.Clear(); // Clear previous path
+        }
+
+        NodeRecord currentRecord = null;
+        openList.Add(new NodeRecord(start));
+
+        while(openList.Count > 0)
+        {
+            currentRecord = GetSmallestNode();
+
+            if(currentRecord.Node == goal)
+            {
+                // goal found
+                openList.Remove(currentRecord);
+                closeList.Add(currentRecord);
+                currentRecord.Node.Tile.GetComponent<TileScript>().SetStatus(TileStatus.CLOSED);
+                break;
+            }
+
+            List<PathConnection> connections = currentRecord.Node.connections;
+
+            for(int i = 0; i < connections.Count; i++)
+            {
+                PathNode endNode = connections[i].ToNode;
+                NodeRecord endNodeRecord;
+                float endNodeCost = currentRecord.CostSoFar + connections[i].Cost;
+
+                if (ContainsNode(closeList, endNode)) continue;
+
+                else if (ContainsNode(openList, endNode))
+                {
+                    endNodeRecord = GetNodeRecord(openList, endNode);
+
+                    if (endNodeRecord.CostSoFar <= endNodeCost)
+                        continue;
+                }
+
+                else
+                {
+                    endNodeRecord = new NodeRecord();
+                    endNodeRecord.Node = endNode;
+                }
+
+                endNodeRecord.CostSoFar = endNodeCost;
+                endNodeRecord.PathConnection = connections[i];
+                endNodeRecord.FromRecord = currentRecord;
+
+                if(!ContainsNode(openList, endNode))
+                {
+                    openList.Add(endNodeRecord);
+                    endNodeRecord.Node.Tile.GetComponent<TileScript>().SetStatus(TileStatus.CLOSED);
+                }
+            }
+
+            openList.Remove(currentRecord);
+            closeList.Add(currentRecord);
+            currentRecord.Node.Tile.GetComponent<TileScript>().SetStatus(TileStatus.CLOSED);
+        }
+
+        if (currentRecord == null) return;
+
+        if(currentRecord.Node != goal)
+        {
+            Debug.LogError("Could not find path to goal!");
+        }
+        else
+        {
+            Debug.Log("Found path to goal!");
+
+            while(currentRecord.Node != start)
+            {
+                path.Add(currentRecord.PathConnection);
+                currentRecord.Node.Tile.GetComponent<TileScript>().SetStatus(TileStatus.PATH);
+                currentRecord = currentRecord.FromRecord;
+            }
+
+            path.Reverse();
+        }
+        openList.Clear();
+        closeList.Clear();
     }
 
     // Utility Methods
@@ -110,7 +192,7 @@ public class PathManager : MonoBehaviour
         return smallestNode;
     }
 
-    public bool ContainNode(List<NodeRecord> list, PathNode node)
+    public bool ContainsNode(List<NodeRecord> list, PathNode node)
     {
         foreach(NodeRecord record in list)
         {
