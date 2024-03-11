@@ -249,8 +249,8 @@ MonoBehaviour:
   panelParent: {fileID: 1574120919}
   minePrefab: {fileID: 6537141037928142162, guid: 3aae427a40059ed4aab13ca36c2d691b, type: 3}
   colors:
-  - {r: 0.5019608, g: 0, b: 0.05753174, a: 0.5019608}
-  - {r: 0, g: 0.06740663, b: 0.5019608, a: 0.5019608}
+  - {r: 0.764151, g: 0.6940369, b: 0.11894804, a: 0.5019608}
+  - {r: 0.012682447, g: 0.2708662, b: 0.5377358, a: 0.5019608}
   baseTileCost: 64
   useManhattanHeuristic: 1
 --- !u!4 &571498480
