@@ -73,6 +73,7 @@ public class GridManager : MonoBehaviour
             Vector2 mineIndex = mineInst.GetComponent<NavigationObject>().GetGridIndex();
             grid[(int)mineIndex.y, (int)mineIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
             mines.Add(mineInst);
+            ConnectGrid();
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -83,6 +84,7 @@ public class GridManager : MonoBehaviour
                 Destroy(mine);
             }
             mines.Clear();
+            ConnectGrid();
         }
 
         if(Input.GetKeyDown(KeyCode.F)) // start PathFinding
