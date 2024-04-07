@@ -24,7 +24,7 @@ public class AttackAction : ActionNode
             {
 
             }
-            else if (AgentScript is RangeCombatEnemy rce)
+            else if (AgentScript is RangedCombatEnemy rce)
             {
 
             }

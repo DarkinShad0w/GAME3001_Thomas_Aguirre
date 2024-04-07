@@ -22,7 +22,7 @@ public class MoveToLOSAction : ActionNode
             {
 
             }
-            else if (AgentScript is RangeCombatEnemy rce)
+            else if (AgentScript is RangedCombatEnemy rce)
             {
 
             }

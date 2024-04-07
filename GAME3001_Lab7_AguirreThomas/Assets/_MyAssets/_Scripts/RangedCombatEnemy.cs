@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangeCombatEnemy : AgentObject
+public class RangedCombatEnemy : AgentObject
 {
     [SerializeField] Transform[] patrolPoints;
     [SerializeField] float pointRadius;
@@ -172,7 +172,7 @@ public class RangeCombatEnemy : AgentObject
 
         // FleelAction leaf.
         TreeNode FleeNode = dt.AddNode(dt.RadiusNode, new PatrolAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)FleeNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        ((ActionNode)FleeNode).SetAgent(this.gameObject, typeof(RangedCombatEnemy));
         dt.treeNodeList.Add(FleeNode);
 
         // HITCondition node.
@@ -191,7 +191,7 @@ public class RangeCombatEnemy : AgentObject
 
         // PatrolAction leaf.
         TreeNode PatrolNode = dt.AddNode(dt.RadiusNode, new PatrolAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)PatrolNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        ((ActionNode)PatrolNode).SetAgent(this.gameObject, typeof(RangedCombatEnemy));
         dt.treeNodeList.Add(PatrolNode);
 
         // LOS Condition Node
@@ -204,7 +204,7 @@ public class RangeCombatEnemy : AgentObject
 
         // MoveToLOSAction Leaf.
         TreeNode moveToLOSNode = dt.AddNode(dt.LOSNode, new MoveToLOSAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)moveToLOSNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        ((ActionNode)moveToLOSNode).SetAgent(this.gameObject, typeof(RangedCombatEnemy));
         dt.treeNodeList.Add(moveToLOSNode);
 
         // RangeCombatCombat Node
@@ -215,12 +215,12 @@ public class RangeCombatEnemy : AgentObject
 
         //MoveToRangeAction leaf.
         TreeNode moveToRangeNode = dt.AddNode(dt.RangedCombatNode, new MoveToRangeAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)moveToRangeNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        ((ActionNode)moveToRangeNode).SetAgent(this.gameObject, typeof(RangedCombatEnemy));
         dt.treeNodeList.Add(moveToRangeNode);
 
         //AttackAction leaf.
         TreeNode attackNode = dt.AddNode(dt.RangedCombatNode, new AttackAction(), TreeNodeType.RIGHT_TREE_NODE);
-        ((ActionNode)attackNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        ((ActionNode)attackNode).SetAgent(this.gameObject, typeof(RangedCombatEnemy));
         dt.treeNodeList.Add(attackNode);
     }
 }

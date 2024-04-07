@@ -22,7 +22,7 @@ public class PatrolAction : ActionNode
             {
                 cce.StartPatrol();
             }
-            else if (AgentScript is RangeCombatEnemy rce)
+            else if (AgentScript is RangedCombatEnemy rce)
             {
                 rce.StartPatrol();
             }

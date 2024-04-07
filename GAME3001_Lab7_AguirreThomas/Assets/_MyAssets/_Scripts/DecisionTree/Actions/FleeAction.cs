@@ -17,7 +17,7 @@ public class FleeAction : ActionNode
             AgentObject ao = Agent.GetComponent<AgentObject>();
             ao.state = ActionState.FLEE;
 
-            if (AgentScript is RangeCombatEnemy rce)
+            if (AgentScript is RangedCombatEnemy rce)
             {
           
             }

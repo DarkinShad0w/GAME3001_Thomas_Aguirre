@@ -17,7 +17,7 @@ public class MoveToRangeAction : ActionNode
             AgentObject ao = Agent.GetComponent<AgentObject>();
             ao.state = ActionState.MOVE_TO_RANGE;
 
-            if (AgentScript is RangeCombatEnemy rce)
+            if (AgentScript is RangedCombatEnemy rce)
             {
 
             }
