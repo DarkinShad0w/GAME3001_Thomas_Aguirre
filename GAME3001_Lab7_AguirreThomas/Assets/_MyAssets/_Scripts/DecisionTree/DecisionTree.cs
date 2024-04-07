@@ -13,6 +13,12 @@ public class DecisionTree
 
     public CloseCombatCondition CloseCombatNode { get; set; }
 
+    public HealthCondition HealthNode { get; set; }
+
+    public HitCondition HitNode { get; set; }
+
+    public RangedCombatCondition RangedCombatNode { get; set; }
+
     public List<TreeNode> treeNodeList;
 
     public DecisionTree(GameObject agent)

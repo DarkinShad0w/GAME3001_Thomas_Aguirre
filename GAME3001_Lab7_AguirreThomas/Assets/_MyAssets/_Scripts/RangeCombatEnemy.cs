@@ -164,41 +164,63 @@ public class RangeCombatEnemy : AgentObject
     private void BuildTree()
     {
         // Root condition node.
-        dt.RadiusNode = new RadiusCondition();
-        dt.treeNodeList.Add(dt.RadiusNode);
+        dt.HealthNode = new HealthCondition();
+        dt.treeNodeList.Add(dt.HealthNode);
+
 
         // Second level.
 
-        // PatrolAction leaf.
-        TreeNode patrolNode = dt.AddNode(dt.RadiusNode, new PatrolAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)patrolNode).Agent = this.gameObject;
-        dt.treeNodeList.Add(patrolNode);
+        // FleelAction leaf.
+        TreeNode FleeNode = dt.AddNode(dt.RadiusNode, new PatrolAction(), TreeNodeType.LEFT_TREE_NODE);
+        ((ActionNode)FleeNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        dt.treeNodeList.Add(FleeNode);
 
-        // LOSCondition node.
-        dt.LOSNode = new LOSCondition();
-        dt.treeNodeList.Add(dt.AddNode(dt.RadiusNode, dt.LOSNode, TreeNodeType.RIGHT_TREE_NODE));
+        // HITCondition node.
+        dt.HitNode = new HitCondition();
+        dt.treeNodeList.Add(dt.AddNode(dt.HealthNode, dt.HitNode, TreeNodeType.RIGHT_TREE_NODE));
 
         // Third level.
 
-        // MoveToLOSAction leaf.
-        TreeNode MoveToLOSNode = dt.AddNode(dt.LOSNode, new MoveToLOSAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)MoveToLOSNode).Agent = this.gameObject;
-        dt.treeNodeList.Add(MoveToLOSNode);
+        // RadiuosCondition.
+        dt.RadiusNode = new RadiusCondition();
+        dt.treeNodeList.Add(dt.AddNode(dt.HitNode, dt.HealthNode, TreeNodeType.LEFT_TREE_NODE));
 
-        // CloseCombatCondition node.
-        dt.CloseCombatNode = new CloseCombatCondition();
-        dt.treeNodeList.Add(dt.AddNode(dt.LOSNode, dt.CloseCombatNode, TreeNodeType.RIGHT_TREE_NODE));
+        //TODO Other LOS Node later
 
         // Fourth level.
 
-        // MoveToPlayerAction leaf.
-        TreeNode MoveToPlayerNode = dt.AddNode(dt.CloseCombatNode, new MoveToPlayerAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)MoveToPlayerNode).Agent = this.gameObject;
-        dt.treeNodeList.Add(MoveToPlayerNode);
+        // PatrolAction leaf.
+        TreeNode PatrolNode = dt.AddNode(dt.RadiusNode, new PatrolAction(), TreeNodeType.LEFT_TREE_NODE);
+        ((ActionNode)PatrolNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        dt.treeNodeList.Add(PatrolNode);
 
-        // AttackAction leaf.
-        TreeNode AttackNode = dt.AddNode(dt.CloseCombatNode, new AttackAction(), TreeNodeType.RIGHT_TREE_NODE);
-        ((ActionNode)AttackNode).Agent = this.gameObject;
-        dt.treeNodeList.Add(AttackNode);
+        // LOS Condition Node
+        dt.LOSNode = new LOSCondition();
+        dt.treeNodeList.Add(dt.AddNode(dt.RadiusNode, dt.LOSNode, TreeNodeType.RIGHT_TREE_NODE));
+
+        // TODO WaitBehindCover and Move to Cover Nodes do later.
+
+        // Fifth level.
+
+        // MoveToLOSAction Leaf.
+        TreeNode moveToLOSNode = dt.AddNode(dt.LOSNode, new MoveToLOSAction(), TreeNodeType.LEFT_TREE_NODE);
+        ((ActionNode)moveToLOSNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        dt.treeNodeList.Add(moveToLOSNode);
+
+        // RangeCombatCombat Node
+        dt.RangedCombatNode = new RangedCombatCondition();
+        dt.treeNodeList.Add(dt.AddNode(dt.LOSNode, dt.RangedCombatNode, TreeNodeType.RIGHT_TREE_NODE));
+
+        // Sixth level.
+
+        //MoveToRangeAction leaf.
+        TreeNode moveToRangeNode = dt.AddNode(dt.RangedCombatNode, new MoveToRangeAction(), TreeNodeType.LEFT_TREE_NODE);
+        ((ActionNode)moveToRangeNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        dt.treeNodeList.Add(moveToRangeNode);
+
+        //AttackAction leaf.
+        TreeNode attackNode = dt.AddNode(dt.RangedCombatNode, new AttackAction(), TreeNodeType.RIGHT_TREE_NODE);
+        ((ActionNode)attackNode).SetAgent(this.gameObject, typeof(RangeCombatEnemy));
+        dt.treeNodeList.Add(attackNode);
     }
 }

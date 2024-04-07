@@ -869,7 +869,7 @@ GameObject:
   - component: {fileID: 2129542644}
   - component: {fileID: 2129542643}
   - component: {fileID: 2129542642}
-  - component: {fileID: 2129542641}
+  - component: {fileID: 2129542645}
   - component: {fileID: 2129542640}
   m_Layer: 0
   m_Name: RangeCombatEnemy
@@ -938,26 +938,6 @@ PolygonCollider2D:
       - {x: 0.053533792, y: -0.008345485}
       - {x: 0.113366365, y: 0.40567368}
   m_UseDelaunayMesh: 0
---- !u!114 &2129542641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2129542639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a39eb3d5a0af1f4ba06e3a6ca705d69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_target: {fileID: 0}
-  patrolPoints: []
-  pointRadius: 0
-  movementSpeed: 0
-  rotationSpeed: 0
-  whiskerLength: 0
-  whiskerAngle: 0
-  testTarget: {fileID: 0}
 --- !u!114 &2129542642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1014,6 +994,26 @@ Transform:
   - {fileID: 857622558}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2129542645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129542639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aa7ee471876c4d278d2f1306f8f3872, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_target: {fileID: 0}
+  patrolPoints: []
+  pointRadius: 0
+  movementSpeed: 0
+  rotationSpeed: 0
+  whiskerLength: 0
+  whiskerAngle: 0
+  testTarget: {fileID: 0}
 --- !u!4 &450941727041656444
 Transform:
   m_ObjectHideFlags: 0

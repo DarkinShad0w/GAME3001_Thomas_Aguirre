@@ -171,7 +171,7 @@ public class CloseCombatEnemy : AgentObject
 
         // PatrolAction leaf.
         TreeNode patrolNode = dt.AddNode(dt.RadiusNode, new PatrolAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)patrolNode).Agent = this.gameObject;
+        ((ActionNode)patrolNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy));
         dt.treeNodeList.Add(patrolNode);
 
         // LOSCondition node.
@@ -182,7 +182,7 @@ public class CloseCombatEnemy : AgentObject
 
         // MoveToLOSAction leaf.
         TreeNode MoveToLOSNode = dt.AddNode(dt.LOSNode, new MoveToLOSAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)MoveToLOSNode).Agent = this.gameObject;
+        ((ActionNode)MoveToLOSNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy));
         dt.treeNodeList.Add(MoveToLOSNode);
 
         // CloseCombatCondition node.
@@ -193,12 +193,12 @@ public class CloseCombatEnemy : AgentObject
 
         // MoveToPlayerAction leaf.
         TreeNode MoveToPlayerNode = dt.AddNode(dt.CloseCombatNode, new MoveToPlayerAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)MoveToPlayerNode).Agent = this.gameObject;
+        ((ActionNode)MoveToPlayerNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy));
         dt.treeNodeList.Add(MoveToPlayerNode);
 
         // AttackAction leaf.
         TreeNode AttackNode = dt.AddNode(dt.CloseCombatNode, new AttackAction(), TreeNodeType.RIGHT_TREE_NODE);
-        ((ActionNode)AttackNode).Agent = this.gameObject;
+        ((ActionNode)AttackNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy));
         dt.treeNodeList.Add(AttackNode);
     }
 }
