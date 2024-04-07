@@ -7,8 +7,10 @@ public enum ActionState
 {
     NO_ACTION = -1,
     ATTACK,
+    FLEE,
     MOVE_TO_LOS,
     MOVE_TO_PLAYER,
+    MOVE_TO_RANGE,
     PATROL
 };
 

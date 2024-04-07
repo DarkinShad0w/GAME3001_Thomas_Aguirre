@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Starship : AgentObject
+public class RangeCombatEnemy : AgentObject
 {
     [SerializeField] Transform[] patrolPoints;
     [SerializeField] float pointRadius;
 
-    [SerializeField] float movementSpeed; // TODO: Uncomment for Lab 7a.
+    [SerializeField] float movementSpeed; 
     [SerializeField] float rotationSpeed;
     [SerializeField] float whiskerLength;
     [SerializeField] float whiskerAngle;
@@ -23,7 +23,7 @@ public class Starship : AgentObject
     new void Start() // Note the new.
     {
         base.Start(); // Explicitly invoking Start of AgentObject.
-        Debug.Log("Starting Starship.");
+        Debug.Log("Starting Range Combat Enemy.");
         rb = GetComponent<Rigidbody2D>();
         no = GetComponent<NavigationObject>();
 
