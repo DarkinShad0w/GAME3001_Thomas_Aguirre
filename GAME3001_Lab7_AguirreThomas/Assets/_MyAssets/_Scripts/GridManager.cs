@@ -34,6 +34,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] bool losToShip;
     [SerializeField] bool losToTarget;
 
+    [SerializeField] GameObject EnemyShip;
+    [SerializeField] GameObject TargetPlayer;
     
     private GameObject[,] grid;
     private int rows = 12;
@@ -278,10 +280,10 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            GameObject player = GameObject.FindWithTag("Ship");
-            Vector3 shipPos = player.transform.position;
-            GameObject planet = GameObject.FindWithTag("Planet");
-            Vector3 planetPos = planet.transform.position;
+            GameObject enemy = EnemyShip;//GameObject.FindWithTag("Ship");
+            Vector3 shipPos = enemy.transform.position;
+            GameObject player = TargetPlayer; //GameObject.FindWithTag("Planet");
+            Vector3 targetPos = player.transform.position;
             foreach (GameObject go in grid)
             {
                 if (go == null) continue;
@@ -295,8 +297,8 @@ public class GridManager : MonoBehaviour
                 bool hasLosToTarget = false;
                 if (losToTarget)
                 {
-                    Vector3 direction = (planetPos - tilePos).normalized;
-                    hasLosToTarget = go.GetComponent<NavigationObject>().HasLOS(go, "Planet", direction, Vector3.Distance(tilePos, planetPos));
+                    Vector3 direction = (targetPos - tilePos).normalized;
+                    hasLosToTarget = go.GetComponent<NavigationObject>().HasLOS(go, "Player", direction, Vector3.Distance(tilePos, targetPos));
                 }
                 if (losToShip && losToTarget)
                 {
