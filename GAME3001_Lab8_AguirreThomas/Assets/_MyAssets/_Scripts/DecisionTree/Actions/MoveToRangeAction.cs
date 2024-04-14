@@ -19,7 +19,7 @@ public class MoveToRangeAction : ActionNode
 
             if (AgentScript is RangedCombatEnemy rce)
             {
-
+                rce.SetCombatTarget();
             }
         }
 

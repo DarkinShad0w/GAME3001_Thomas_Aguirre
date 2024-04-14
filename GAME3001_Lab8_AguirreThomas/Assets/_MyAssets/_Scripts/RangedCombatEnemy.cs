@@ -22,6 +22,15 @@ public class RangedCombatEnemy : AgentObject
     private int patrolIndex;
     [SerializeField] Transform testTarget;
 
+    [Header("Torpedo Properties")]
+    private bool readyToFire = true;
+    [SerializeField] float torpedoCooldown;
+    [SerializeField] float torpedoLifespan;
+    [SerializeField] GameObject torpedoPrefab;
+    [SerializeField] float combatRange;
+
+    [SerializeField] float health;
+
     new void Start() // Note the new.
     {
         base.Start(); // Explicitly invoking Start of AgentObject.
@@ -54,12 +63,32 @@ public class RangedCombatEnemy : AgentObject
         dt.RadiusNode.IsWithinRadius = Vector3.Distance(transform.position, testTarget.position) <= detectRange;
         dt.LOSNode.HasLOS = hit;
 
+        dt.HealthNode.IsHealthy = health > 25;
+
+        dt.RangedCombatNode.IsWithinCombatRange = Vector3.Distance(transform.position, testTarget.position) <= combatRange;
+
         dt.MakeDecision();
 
         switch(state)
         {
             case ActionState.PATROL:
                 SeekForward();
+                break;
+
+            case ActionState.FLEE:
+                Flee();
+                break;
+
+            case ActionState.MOVE_TO_RANGE:
+                MoveToRange();
+                break;
+
+            case ActionState.MOVE_TO_LOS:
+                MoveToLOS();
+                break;
+
+            case ActionState.ATTACK:
+                Attack();
                 break;
 
             default:
@@ -233,5 +262,44 @@ public class RangedCombatEnemy : AgentObject
         TreeNode attackNode = dt.AddNode(dt.RangedCombatNode, new AttackAction(), TreeNodeType.RIGHT_TREE_NODE);
         ((ActionNode)attackNode).SetAgent(this.gameObject, typeof(RangedCombatEnemy));
         dt.treeNodeList.Add((attackNode));
+    }
+
+    private void Flee()
+    {
+
+    }
+    private void MoveToRange()
+    {
+        SeekForward();
+    }
+    public void SetCombatTarget()
+    {
+        m_target = testTarget;
+    }
+    private void MoveToLOS()
+    {
+
+    }
+    private void Attack()
+    {
+        if (readyToFire)
+        {
+            FireTorpedo();
+        }
+    }
+    private void FireTorpedo()
+    {
+        readyToFire = false;
+        Game.Instance.SOMA.PlaySound("Torpedo_k");
+        Invoke("ReloadTorpedo", torpedoCooldown);
+        GameObject torpedoInst = GameObject.Instantiate(torpedoPrefab, transform.position, Quaternion.identity);
+        torpedoInst.GetComponent<EnemyTorpedoScript>().LockOnTarget(testTarget);
+        Destroy(torpedoInst, torpedoLifespan);
+    }
+
+    private void ReloadTorpedo()
+    {
+        Debug.Log("Torpedo reloaded");
+        readyToFire = true;
     }
 }
