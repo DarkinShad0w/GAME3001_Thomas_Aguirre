@@ -203,4 +203,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa74ed3aad54aa44fbcc24ea94723ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  torpedoCooldown: 3
+  torpedoLifespan: 5
+  torpedoPrefab: {fileID: 1926055282298919914, guid: 5aba2c4ad1fd94bf4aa157a68a714ca7, type: 3}
+  combatRange: 5
   gridIndex: {x: 0, y: 0}

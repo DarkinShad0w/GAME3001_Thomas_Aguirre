@@ -4,11 +4,62 @@ using UnityEngine;
 
 public class NavigationObject : MonoBehaviour
 {
+
+    [Header("Torpedo Properties")]
+    private bool readyToFire = true;
+    [SerializeField] float torpedoCooldown;
+    [SerializeField] float torpedoLifespan;
+    [SerializeField] GameObject torpedoPrefab;
+    [SerializeField] float combatRange;
+
     public Vector2 gridIndex;
+
+    private float timeSinceLastFire;
+
     void Awake()
     {
         gridIndex = new Vector2();
         SetGridIndex();
+    }
+
+    void Update()
+    {
+
+        if (!readyToFire)
+        {
+            timeSinceLastFire += Time.deltaTime;
+            if (timeSinceLastFire >= torpedoCooldown)
+            {
+                readyToFire = true;
+                timeSinceLastFire = 0;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && readyToFire)
+        {
+            FireTorpedo();
+            Game.Instance.SOMA.PlaySound("Torpedo");
+        }
+    }
+
+    void FireTorpedo()
+    {
+        // Calculate the direction from the player to the mouse cursor
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 direction = (mousePosition - transform.position).normalized;
+
+        // Instantiate the torpedo
+        GameObject torpedo = Instantiate(torpedoPrefab, transform.position, Quaternion.identity);
+        PlayerTorpedoScript torpedoScript = torpedo.GetComponent<PlayerTorpedoScript>();
+        if (torpedoScript != null)
+        {
+            // Set the direction of the torpedo
+            torpedoScript.LockOnTarget(direction);
+        }
+
+        // Set the torpedo to destroy itself after its lifespan
+        Destroy(torpedo, torpedoLifespan);
+
+        readyToFire = false;
     }
 
     public Vector2 GetGridIndex()
@@ -43,5 +94,6 @@ public class NavigationObject : MonoBehaviour
             return true;
         }
         return false;
+
     }
 }

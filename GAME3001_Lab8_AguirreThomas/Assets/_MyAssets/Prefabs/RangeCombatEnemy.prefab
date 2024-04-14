@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 807366146688835430}
   m_Layer: 0
   m_Name: RangeCombatEnemy
-  m_TagString: Ship
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -159,6 +159,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa74ed3aad54aa44fbcc24ea94723ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  torpedoCooldown: 0
+  torpedoLifespan: 0
+  torpedoPrefab: {fileID: 0}
+  combatRange: 0
   gridIndex: {x: 0, y: 0}
 --- !u!60 &8918898243991802033
 PolygonCollider2D:
@@ -238,9 +242,15 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  pointRadius: 4
+  pointRadius: 1
   movementSpeed: 1
   rotationSpeed: 90
-  whiskerLength: 0
+  whiskerLength: 4
   whiskerAngle: 0
+  detectRange: 6
   testTarget: {fileID: 0}
+  torpedoCooldown: 3
+  torpedoLifespan: 5
+  torpedoPrefab: {fileID: 5393261814577156895, guid: d5a0f53019b9f491eaa4b08326215a97, type: 3}
+  combatRange: 5
+  health: 100
